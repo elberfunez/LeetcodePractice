@@ -1,0 +1,20 @@
+## Build results
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+## IDE
+.idea/
+.vs/
+*.sln.iml
+*.user
+.vscode/
+
+## OS
+.DS_Store
+Thumbs.db
+
+## dotnet
+.dotnet/
