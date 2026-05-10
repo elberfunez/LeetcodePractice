@@ -1,0 +1,7 @@
+This is going to be a checklist for every problem you encounter. You need to pay extra attention when you get these.
+
+1. Are they giving you a sorted data structure?
+    a. think Binary Search
+    b. Think two pointers with one on the left and another on the right
+    
+2.

@@ -12,7 +12,13 @@ public class TwoSumTemplate
 
     private void Test(string name, int[] nums, int target, int[] expected)
     {
-        // Implement test logic here
+        int[] result = TwoSumMethod(nums, target);
+        bool passed = result.SequenceEqual(expected);
+        Console.WriteLine($"{name}: {(passed ? "✓ PASS" : "✗ FAIL")}");
+        Console.WriteLine($"  Input:    nums=[{string.Join(", ", nums)}], target={target}");
+        Console.WriteLine($"  Output:   [{string.Join(", ", result)}]");
+        if (!passed) Console.WriteLine($"  Expected: [{string.Join(", ", expected)}]");
+        Console.WriteLine();
     }
 
     private int[] TwoSumMethod(int[] nums, int target)

@@ -11,7 +11,13 @@ public class IsPalindromeTemplate
 
     private void Test(string name, string s, bool expected)
     {
-        // Implement test logic here
+        bool result = ValidPalindrome(s);
+        bool passed = result == expected;
+        Console.WriteLine($"{name}: {(passed ? "✓ PASS" : "✗ FAIL")}");
+        Console.WriteLine($"  Input:    \"{s}\"");
+        Console.WriteLine($"  Output:   {result}");
+        if (!passed) Console.WriteLine($"  Expected: {expected}");
+        Console.WriteLine();
     }
 
     private bool ValidPalindrome(string s)
