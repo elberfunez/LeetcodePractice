@@ -14,52 +14,52 @@ The console menu displays all available problems organized by topic, with diffic
 
 ## Adding a New Problem
 
-1. **Choose a category** — Create your file in `Problems/{Category}/`
+1. **Choose a category** — Create a folder in `Problems/{Category}/{ProblemName}/`
+
+2. **Create four files**:
    
-2. **Create the class file** — Name it `P{number:4digits}_{Title}.cs`
+   **{ProblemName}.cs** — Your solution (shows in the menu):
    ```csharp
    namespace LeetcodePractice.Problems.ArraysAndHashing;
 
+   // Problem statement: TwoSum.md
    [Problem(1, "Two Sum", Category.ArraysAndHashing, Difficulty.Easy)]
-   public class P0001_TwoSum : ProblemBase
+   public class TwoSum : ProblemBase
    {
        protected override void Solve()
        {
-           Test("Example 1", [2, 7, 11, 15], 9, [0, 1]);
-           Test("Example 2", [3, 2, 4], 6, [1, 2]);
-           Test("Example 3", [3, 3], 6, [0, 1]);
+           Test("Example 1", [3, 4, 5, 6], 7, [0, 1]);
+           Test("Example 2", [4, 5, 6], 10, [0, 2]);
+           Test("Example 3", [5, 5], 10, [0, 1]);
        }
 
        private void Test(string name, int[] nums, int target, int[] expected)
        {
-           int[] result = TwoSum(nums, target);
-           bool passed = result.SequenceEqual(expected);
-           Console.WriteLine($"{name}: {(passed ? "✓ PASS" : "✗ FAIL")}");
-           Console.WriteLine($"  Input:    nums=[{string.Join(", ", nums)}], target={target}");
-           Console.WriteLine($"  Output:   [{string.Join(", ", result)}]");
-           if (!passed) Console.WriteLine($"  Expected: [{string.Join(", ", expected)}]");
-           Console.WriteLine();
+           // Your test implementation
        }
 
-       private int[] TwoSum(int[] nums, int target)
+       private int[] TwoSumMethod(int[] nums, int target)
        {
-           var seen = new Dictionary<int, int>();
-           for (int i = 0; i < nums.Length; i++)
-           {
-               if (seen.TryGetValue(target - nums[i], out int j))
-                   return [j, i];
-               seen[nums[i]] = i;
-           }
+           // Your solution here
            return [];
        }
    }
    ```
+
+   **Template.cs** — Starter boilerplate for others cloning your repo:
+   ```csharp
+   namespace LeetcodePractice.Problems.ArraysAndHashing;
+
+   // Template - Do not inherit from ProblemBase. To use: rename class and add : ProblemBase
+   public class TwoSumTemplate
+   {
+       // Same structure as TwoSum.cs but with empty implementations
+   }
+   ```
+
+   **{ProblemName}.md** — Problem statement in NeetCode format
    
-   **Key points:**
-   - Inherit from `ProblemBase` (not `IProblem`)
-   - Override `Solve()` instead of implementing `Run()`
-   - Create a `Test()` method for your problem type
-   - Run multiple test cases and see `✓ PASS`/`✗ FAIL` status
+   **Notes.md** — Pre-populated headers for your approach notes
 
 3. **Build and run** — The problem automatically appears in the menu:
    ```bash
