@@ -36,12 +36,16 @@ public class ValidParentheses : ProblemBase
         };
         
         foreach (char c in s) {
-            if (pairs.TryGetValue(c, out char opening)) {
+            if (pairs.TryGetValue(c, out char opening)) 
+            {
                 // closing bracket
-                if (stack.Count == 0 || stack.Pop() != opening) {
+                if (stack.Count == 0 || stack.Pop() != opening)
+                {
                     return false;
                 }
-            } else {
+            } 
+            else 
+            {
                 // opening bracket
                 stack.Push(c);
             }

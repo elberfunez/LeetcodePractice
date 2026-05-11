@@ -24,7 +24,19 @@ public class TwoSum : ProblemBase
 
     private int[] TwoSumMethod(int[] nums, int target)
     {
-        // Your solution here
-        return [];
+        Dictionary<int, int> d = new();
+        for (int i = 0; i < nums.Length; i++)
+        {
+            int rem = target - nums[i]; // this is what well check in the hm
+            if (d.TryGetValue(rem, out int j))
+            {
+                return [j, i];
+            }
+            else 
+            {
+                d[nums[i]] = i;
+            }
+        }
+        return [0,0];
     }
 }
