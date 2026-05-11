@@ -32,10 +32,7 @@ public class TwoSum : ProblemBase
             {
                 return [j, i];
             }
-            else 
-            {
-                d[nums[i]] = i;
-            }
+            d[nums[i]] = i;
         }
         return [0,0];
     }
