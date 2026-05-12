@@ -95,14 +95,14 @@ Benefits:
 
 ---
 
-## Your Solution Approach
+## My Solution Approach
 
 ### **Step 1: Early Termination - Even Length Check**
 ```csharp
 if (s.Length % 2 != 0) return false; // must be even length
 ```
 
-**Optimization:** Odd-length strings can never have matching pairs. Return immediately without processing.
+Optimization: Odd-length strings can never have matching pairs. Return immediately without processing.
 
 ### **Step 2: Create the Mapping Dictionary**
 ```csharp
@@ -113,14 +113,14 @@ var pairs = new Dictionary<char, char> {
 };
 ```
 
-Maps each **closing bracket** to its **matching opening bracket**. Using closing brackets as keys lets us easily identify them with `TryGetValue`.
+Maps each **closing bracket** to its **matching opening bracket**. Using closing brackets as keys lets me easily identify them with `TryGetValue`.
 
 ### **Step 3: Initialize the Stack**
 ```csharp
 var stack = new Stack<char>();
 ```
 
-Stores opening brackets. When closing brackets arrive, we pop and check matches.
+Stores opening brackets. When closing brackets arrive, I pop and check matches.
 
 ### **Step 4: Process Each Character with TryGetValue**
 ```csharp
@@ -140,7 +140,7 @@ foreach (char c in s) {
 **TryGetValue advantage:**
 - Returns `true` if `c` is a key in the dictionary (closing bracket)
 - Outputs the **value** (matching opening bracket) in the `out` parameter
-- **Cleaner than** `ContainsKey(c)` + `c[pairs]` (two lookups)
+- Cleaner than `ContainsKey(c)` + `c[pairs]` (two lookups)
 
 **The logic:**
 - **Closing bracket found** → Check if it matches the top of stack (pop and compare in one line)
@@ -151,7 +151,7 @@ foreach (char c in s) {
 return stack.Count == 0;
 ```
 
-All opening brackets must be matched and popped. If stack still has brackets, there were unmatched openings → invalid.
+All opening brackets must be matched and popped. If the stack still has brackets, there were unmatched openings → invalid.
 
 ### **Why This Works**
 

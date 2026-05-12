@@ -79,14 +79,14 @@ The hash map approach is **best when:**
 
 ---
 
-## Your Solution Approach
+## My Solution Approach
 
 ### **Step 1: Initialize Hash Map**
 ```csharp
 Dictionary<int, int> d = new();
 ```
 
-Will store `value → index` pairs. Use this to quickly check if a number has been seen.
+Stores `value → index` pairs. I use this to quickly check if a number has been seen.
 
 ### **Step 2: Iterate Through Array**
 ```csharp
@@ -103,7 +103,7 @@ int rem = target - nums[i]; // this is what we'll check in the map
 
 **The math:** If `a + b = target`, then `b = target - a`
 
-So for current number `nums[i]`, the complement we're looking for is `rem`.
+For the current number `nums[i]`, the complement I'm looking for is `rem`.
 
 ### **Step 4: Check if Complement Exists (TryGetValue)**
 ```csharp
@@ -116,9 +116,9 @@ if (d.TryGetValue(rem, out int j))
 **TryGetValue is the key:**
 - Returns `true` if `rem` exists in dictionary
 - Outputs the index in the `out` parameter `j`
-- **Cleaner than** checking `ContainsKey(rem)` then `d[rem]` (two lookups)
+- Cleaner than checking `ContainsKey(rem)` then `d[rem]` (two lookups)
 
-If found → we have our pair! Return indices immediately.
+If found → I have my pair! Return indices immediately.
 
 ### **Step 5: Add Current Number to Map**
 ```csharp
@@ -128,13 +128,13 @@ else
 }
 ```
 
-If complement not found yet, add current number to map for future iterations to find.
+If the complement is not found yet, I add the current number to the map for future iterations to find.
 
 ### **Why This Works**
 
 1. **Complement approach** — For each number, ask "have I seen what I need?"
 2. **Hash map** — O(1) lookup makes checking instant
-3. **Single pass** — Add to map as we go, no preprocessing needed
+3. **Single pass** — Add to map as I go, no preprocessing needed
 4. **Early return** — Stop immediately when pair is found
 5. **Works on unsorted arrays** — No need to sort
 

@@ -90,7 +90,7 @@ This sorted-key approach is the most straightforward and efficient.
 
 ---
 
-## Your Solution Approach
+## My Solution Approach
 
 ### **Step 1: Initialize Dictionary for Grouping**
 ```csharp
@@ -105,7 +105,7 @@ foreach (var s in strs)
 {
 ```
 
-Process each string to find its group.
+I process each string to find its group.
 
 ### **Step 3: Create Canonical Key by Sorting**
 ```csharp
@@ -114,7 +114,7 @@ Array.Sort(chars);
 string key = new string(chars);
 ```
 
-**The magic:** Sort the string's characters to get the canonical form.
+**The magic:** I sort the string's characters to get the canonical form.
 
 Example:
 - "cat" → ['c', 'a', 't'] → sort → ['a', 'c', 't'] → "act" (key)
@@ -129,17 +129,17 @@ if (!groups.TryGetValue(key, out var group))
 }
 ```
 
-**Efficient check and creation:**
+Efficient check and creation:
 - `TryGetValue` returns false if key doesn't exist
 - If it doesn't exist, create a new list and add to dictionary
-- Either way, we now have a `group` list to add to
+- Either way, I now have a `group` list to add to
 
 ### **Step 5: Add String to Group**
 ```csharp
 group.Add(s);
 ```
 
-Add the original string to its anagram group (identified by sorted key).
+I add the original string to its anagram group (identified by sorted key).
 
 ### **Step 6: Return All Groups**
 ```csharp
@@ -152,7 +152,7 @@ Convert dictionary values (all the groups) to a list and return.
 
 1. **Sorted key** — All anagrams have identical sorted forms
 2. **Dictionary grouping** — Automatically collects anagrams under same key
-3. **Original strings** — We store original order, not sorted
+3. **Original strings** — I store original order, not sorted
 4. **Efficient lookup** — TryGetValue in O(1) average
 5. **Simple logic** — No manual frequency counting needed
 

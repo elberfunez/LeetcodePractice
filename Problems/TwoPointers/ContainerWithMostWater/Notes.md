@@ -92,7 +92,7 @@ area = min(7, 5) * 2 = 10 (BETTER! might find taller bar on left side)
 
 ---
 
-## Your Solution Approach
+## My Solution Approach
 
 ### **Step 1: Initialize Pointers**
 ```csharp
@@ -101,7 +101,7 @@ int r = heights.Length - 1;
 int maxArea = 0;
 ```
 
-Start at both ends (widest possible container) and track the maximum area found.
+I start at both ends (widest possible container) and track the maximum area found.
 
 ### **Step 2: Calculate Area at Current Position**
 ```csharp
@@ -120,7 +120,7 @@ if (area > maxArea)
 }
 ```
 
-Track the best area seen so far.
+I track the best area seen so far.
 
 ### **Step 4: Move the Shorter Pointer**
 ```csharp
@@ -130,7 +130,7 @@ else
     r--;          // Right bar is shorter (or equal), move it inward
 ```
 
-This is the **critical decision**. Moving the shorter bar gives us a chance to find a taller bar that might compensate for the decreased width.
+This is the **critical decision**. Moving the shorter bar gives me a chance to find a taller bar that might compensate for the decreased width.
 
 ### **Step 5: Repeat Until Pointers Meet**
 ```csharp
@@ -140,13 +140,13 @@ while (l < r)
 }
 ```
 
-Continue until the two pointers meet, exploring all promising container positions.
+I continue until the two pointers meet, exploring all promising container positions.
 
 ### **Why This Works**
 
-1. **We start with maximum width** — Any other pair of bars will have less or equal distance
-2. **We only move the shorter bar** — This is the only way to potentially improve the area
-3. **We track the global maximum** — No matter which bars we explore, we keep the best result
+1. **I start with maximum width** — Any other pair of bars will have less or equal distance
+2. **I only move the shorter bar** — This is the only way to potentially improve the area
+3. **I track the global maximum** — No matter which bars I explore, I keep the best result
 4. **Linear time complexity** — Each bar is visited at most once by either pointer
 
 ### **Example Walkthrough**

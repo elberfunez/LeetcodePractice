@@ -87,7 +87,7 @@ Benefits:
 
 ---
 
-## Your Solution Approach
+## My Solution Approach
 
 ### **Step 1: Edge Case - Minimum Length**
 ```csharp
@@ -101,7 +101,7 @@ Optimization: Can't have duplicates with 0 or 1 element. Return immediately.
 HashSet<int> seen = new();
 ```
 
-Will track numbers we've already encountered.
+Tracks numbers I've already encountered.
 
 ### **Step 3: Iterate and Try to Add**
 ```csharp
@@ -119,14 +119,14 @@ foreach (int num in nums)
 - `seen.Add(num)` returns `false` if the element already existed
 - `!` negates it: `!true = false`, `!false = true`
 
-So we return `true` (duplicate found) when Add returns false (element already exists).
+I return `true` (duplicate found) when Add returns false (element already exists).
 
 ### **Step 4: No Duplicates Found**
 ```csharp
 return false;
 ```
 
-If we complete the loop without finding a duplicate, no duplicates exist.
+If I complete the loop without finding a duplicate, no duplicates exist.
 
 ### **Why This Works**
 

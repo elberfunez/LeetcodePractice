@@ -92,7 +92,7 @@ The sorting also optimizes it: after sorting, if `nums[i] > 0`, no more valid tr
 
 ---
 
-## Your Solution Approach
+## My Solution Approach
 
 ### **Step 1: Edge Case & Sorting**
 ```csharp
@@ -100,7 +100,7 @@ if (nums.Length < 3) return result;  // Can't make triplet with < 3 numbers
 Array.Sort(nums);                    // Sort to enable two-pointer technique
 ```
 
-Sorting is **crucial** — it allows the two-pointer optimization and enables duplicate skipping.
+Sorting is **crucial** — it allows me to use the two-pointer optimization and enables duplicate skipping.
 
 ### **Step 2: Fix One Element in a Loop**
 ```csharp

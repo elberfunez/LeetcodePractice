@@ -85,14 +85,14 @@ More advanced approaches (heap, bucket sort) optimize this further, but this fre
 
 ---
 
-## Your Solution Approach
+## My Solution Approach
 
 ### **Step 1: Initialize Frequency Dictionary**
 ```csharp
 Dictionary<int, int> freq = new();
 ```
 
-Will map each number to how many times it appears in the array.
+Maps each number to how many times it appears in the array.
 
 ### **Step 2: Count Frequencies**
 ```csharp
@@ -109,7 +109,7 @@ foreach (int num in nums)
 }
 ```
 
-Iterate through all numbers and increment their frequency count. This builds a complete frequency map.
+I iterate through all numbers and increment their frequency count. This builds a complete frequency map.
 
 **Note:** Could also use `TryGetValue` for a more compact pattern:
 ```csharp
@@ -119,7 +119,7 @@ foreach (int num in nums)
 }
 ```
 
-But your explicit approach is clear and readable.
+But my explicit approach is clear and readable.
 
 ### **Step 3: Sort by Frequency (Descending)**
 ```csharp
@@ -231,4 +231,4 @@ Extract keys:
 - Collect from highest frequency buckets to get top k
 - Optimal when k is a significant fraction of N
 
-Your straightforward sort approach is elegant and efficient for most practical cases. It prioritizes clarity over the micro-optimizations that heap or bucket sort offer.
+My straightforward sort approach is elegant and efficient for most practical cases. It prioritizes clarity over the micro-optimizations that heap or bucket sort offer.

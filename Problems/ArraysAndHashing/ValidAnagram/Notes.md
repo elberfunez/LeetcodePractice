@@ -83,21 +83,21 @@ The elegance is that by the end, if all counts reached 0, it's guaranteed to be 
 
 ---
 
-## Your Solution Approach
+## My Solution Approach
 
 ### **Step 1: Length Check Optimization**
 ```csharp
 if (s.Length != t.Length) return false;
 ```
 
-**Fast-path rejection:** Anagrams must have the same length. If lengths differ, it's impossible. Return immediately without processing.
+Fast-path rejection: anagrams must have the same length. If lengths differ, it's impossible. Return immediately without processing.
 
 ### **Step 2: Initialize Frequency Dictionary**
 ```csharp
 Dictionary<char, int> freq = new(); // <character, count>
 ```
 
-Will map each character to how many times it appears in string `s`.
+Maps each character to how many times it appears in string `s`.
 
 ### **Step 3: Build Frequency Map from First String**
 ```csharp
@@ -114,7 +114,7 @@ foreach (char c in s)
 }
 ```
 
-Count occurrences of each character in `s`. This establishes what we "expect" to see in `t`.
+I count occurrences of each character in `s`. This establishes what I "expect" to see in `t`.
 
 **Alternative (cleaner):** Could use `TryGetValue` or `GetValueOrDefault` like in other solutions, but this explicit approach is clear.
 
@@ -131,15 +131,15 @@ foreach (char c in t)
 
 For each character in `t`:
 - **Check existence:** If the character doesn't exist in frequency map, it's in `t` but not in `s` → not an anagram
-- **Decrement count:** We've "used" one instance of this character
-- **Check overflow:** If count goes negative, we have more instances of this character in `t` than in `s` → not an anagram
+- **Decrement count:** I've "used" one instance of this character
+- **Check overflow:** If count goes negative, I have more instances of this character in `t` than in `s` → not an anagram
 
 ### **Step 5: Success**
 ```csharp
 return true;
 ```
 
-If we complete the loop without returning false, all characters matched perfectly → they're anagrams!
+If I complete the loop without returning false, all characters matched perfectly → they're anagrams!
 
 ### **Why This Works**
 
