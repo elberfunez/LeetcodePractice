@@ -169,39 +169,127 @@ I merge the two halves by alternating their connections:
 4. **Interleaving alternates correctly** — Manual pointer manipulation gives precise control
 5. **In-place modification** — Only pointer changes, no data duplication
 
-### **Example Walkthrough - Even Length**
+### **Detailed Pointer Animation - Interleaving Explained**
+
+This is the trickiest part! Let me show with a 6-node example exactly how pointers get updated.
 
 ```
-Input: [2,4,6,8]
+BEFORE INTERLEAVING:
 
-Step 1: Find middle
-  slow pointer reaches 4, fast reaches end (null)
-  Middle identified
+First half:  Node(1) -> Node(2) -> Node(3) -> null
+Second half: Node(6) -> Node(5) -> Node(4) -> null
 
-Step 2: Split
-  First: 2 -> 4 -> null
-  Second: 6 -> 8 -> null
+Variables:
+  firstHalf = points to Node(1)
+  secondHalfReversed = points to Node(6)
 
-Step 3: Reverse second
-  Reversed: 8 -> 6 -> null
 
-Step 4: Interleave
-  Iteration 1:
-    firstHalf = 2, secondHalfReversed = 8
-    Save: firstNext = 4, secondNext = 6
-    2.next = 8, 8.next = 4
-    Move: firstHalf = 4, secondHalfReversed = 6
-    
-  Iteration 2:
-    firstHalf = 4, secondHalfReversed = 6
-    Save: firstNext = null, secondNext = null
-    4.next = 6, 6.next = null
-    Move: firstHalf = null, secondHalfReversed = null
-    
-  Loop exits
+ITERATION 1: Merge Node(1) with Node(6)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Final: 2 -> 8 -> 4 -> 6 -> null ✓
+Before changes:
+  Node(1) -> Node(2) -> Node(3)
+  Node(6) -> Node(5) -> Node(4)
+
+Step 1: Save pointers (CRITICAL - save BEFORE changing connections)
+  firstNext = firstHalf.next = Node(2)
+  secondNext = secondHalfReversed.next = Node(5)
+
+Step 2: Change firstHalf.next to point to secondHalfReversed
+  firstHalf.next = secondHalfReversed
+  
+  Now: Node(1) -> Node(6) -> Node(5) -> Node(4)
+                   ↑ This changed!
+             (was pointing to Node(2), now points to Node(6))
+
+Step 3: Change secondHalfReversed.next to point to saved firstNext
+  secondHalfReversed.next = firstNext
+  
+  Now: Node(1) -> Node(6) -> Node(2) -> Node(3)
+                   ↑ This changed!
+             (was pointing to Node(5), now points to Node(2))
+
+Step 4: Move both pointers forward
+  firstHalf = firstNext = Node(2)
+  secondHalfReversed = secondNext = Node(5)
+
+Current structure: Node(1) -> Node(6) -> Node(2) -> Node(3)
+                                        ↑ firstHalf points here
+                            ↑ secondHalfReversed points here
+
+
+ITERATION 2: Merge Node(2) with Node(5)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before this iteration:
+  firstHalf points to Node(2)
+  secondHalfReversed points to Node(5)
+
+The pointers we saved earlier still work because we SAVED them!
+
+Step 1: Save pointers
+  firstNext = firstHalf.next = Node(3)
+  secondNext = secondHalfReversed.next = Node(4)
+
+Step 2: Change Node(2).next to point to Node(5)
+  firstHalf.next = secondHalfReversed
+  
+  Before: Node(2) -> Node(3) -> null
+  After:  Node(2) -> Node(5) -> Node(4) -> null
+                     ↑ Changed!
+
+Step 3: Change Node(5).next to point to Node(3)
+  secondHalfReversed.next = firstNext
+  
+  Before: Node(5) -> Node(4) -> null
+  After:  Node(5) -> Node(3) -> null
+          ↑ Changed!
+
+Step 4: Move forward
+  firstHalf = firstNext = Node(3)
+  secondHalfReversed = secondNext = Node(4)
+
+Current structure: Node(1) -> Node(6) -> Node(2) -> Node(5) -> Node(3) -> ...
+                                                              ↑ firstHalf
+                                              ↑ secondHalfReversed
+
+
+ITERATION 3: Merge Node(3) with Node(4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1: Save
+  firstNext = Node(3).next = null
+  secondNext = Node(4).next = null
+
+Step 2: Node(3).next = Node(4)
+Step 3: Node(4).next = null
+
+Step 4: Move forward
+  firstHalf = null
+  secondHalfReversed = null
+
+Loop exits!
+
+FINAL RESULT: 1 -> 6 -> 2 -> 5 -> 3 -> 4 -> null ✓
+
+THIS IS THE PATTERN! The pointers alternate perfectly because we:
+1. Save the next nodes BEFORE changing anything
+2. Make the interleaving connections
+3. Use the saved pointers to jump to the next pair
 ```
+
+**Why saving is CRITICAL:**
+
+If I didn't save `firstNext` and `secondNext`:
+```csharp
+// WRONG - Don't do this!
+firstHalf.next = secondHalfReversed;     // Now firstHalf.next points to secondHalfReversed
+secondHalfReversed.next = firstHalf.next; // ERROR! firstHalf.next is NOW secondHalfReversed
+                                           // I'm making a self-loop instead!
+firstHalf = firstHalf.next; // I lost track of the original firstHalf.next value!
+```
+
+The saved pointers act as "anchors" - they remember where to go next before the connections change.
 
 ### **Example Walkthrough - Odd Length**
 
