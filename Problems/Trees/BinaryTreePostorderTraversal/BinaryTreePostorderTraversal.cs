@@ -1,31 +1,31 @@
 namespace LeetcodePractice.Problems.Trees;
 
-// Problem statement: BinaryTreeInorderTraversal.md
-[Problem(94, "Binary Tree Inorder Traversal", Category.Trees, Difficulty.Easy)]
-public class BinaryTreeInorderTraversal : ProblemBase
+// Problem statement: BinaryTreePostorderTraversal.md
+[Problem(145, "Binary Tree Postorder Traversal", Category.Trees, Difficulty.Easy)]
+public class BinaryTreePostorderTraversal : ProblemBase
 {
-    private Recursive recursiveSolution = new Recursive();
-    private Iterative iterativeSolution = new Iterative();
+    private PostorderRecursive recursiveSolution = new PostorderRecursive();
+    private PostorderIterative iterativeSolution = new PostorderIterative();
 
     protected override void Solve()
     {
         var testCases = new[]
         {
-            ("Example 1", TreeHelper.CreateTree([1, 2, 3, 4, 5, 6, 7]), new List<int> { 4, 2, 5, 1, 6, 3, 7 }),
-            ("Example 2", TreeHelper.CreateTree([1, 2, 3, null, 4, 5, null]), new List<int> { 2, 4, 1, 5, 3 }),
+            ("Example 1", TreeHelper.CreateTree([1, 2, 3, 4, 5, 6, 7]), new List<int> { 4, 5, 2, 6, 7, 3, 1 }),
+            ("Example 2", TreeHelper.CreateTree([1, 2, 3, null, 4, 5, null]), new List<int> { 4, 2, 5, 3, 1 }),
             ("Example 3", TreeHelper.CreateTree([]), new List<int> { }),
         };
 
         Console.WriteLine("=== Recursive Solution ===");
         foreach (var (name, root, expected) in testCases)
         {
-            Test(name, root, expected, recursiveSolution.Inorder);
+            Test(name, root, expected, recursiveSolution.Postorder);
         }
 
         Console.WriteLine("\n=== Iterative Solution ===");
         foreach (var (name, root, expected) in testCases)
         {
-            Test(name, root, expected, iterativeSolution.Inorder);
+            Test(name, root, expected, iterativeSolution.Postorder);
         }
     }
 
