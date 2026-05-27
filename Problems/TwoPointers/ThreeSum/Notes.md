@@ -1,208 +1,176 @@
 # Notes - 3Sum
-\
+
 ## Pattern / Approach
 
-Two pointers applied AFTER fixing one element. Sort the array, then for each element, use two pointers to find pairs that sum to `0 - nums[i]`.
+Use **two pointers after sorting** combined with **fixing one element**. Sort the array, then for each element, use two pointers to find pairs that make the total sum equal to 0. The key is **skipping duplicates** to avoid duplicate triplets.
 
 ## Data Structure(s) Used
 
-- Sorted array (requires sorting)
-- HashSet or manual duplicate tracking (to avoid duplicate triplets)
+- Sorted array (enables two-pointer technique)
+- Two pointer indices (left, right)
+- Result list to store triplets
 
 ## Thought Process
 
-Finding three numbers that sum to 0 is hard with brute force (O(N³)). But we can **reduce it to a two-sum problem**:
+Finding three numbers that sum to 0 is O(N³) with brute force. But we can **reduce it to a two-pointer problem**:
 
 1. **Sort the array** — Enables two-pointer technique
 2. **Fix one element** at a time: `nums[i]`
-3. **Find two elements** that sum to `target - nums[i]` (which is `0 - nums[i]`)
-4. **Use two pointers** (left and right) for the remaining array
+3. **Find two elements** that make the total sum = 0
+4. **Use two pointers** on the remaining array to find pairs efficiently
 
 ```
 Example: nums = [-1, 0, 1, 2, -1, -4]
 After sort: [-4, -1, -1, 0, 1, 2]
-            [ 0   1   2  3  4  5]  (indices)
 
-Fix nums[0] = -4, need two numbers that sum to 4
-  [-4, -1, -1,  0,  1,  2]
-    L                      R
-  → No triplets sum to 0 with -4
+Fix nums[0] = -4, need left+right = 4 (to make -4 + left + right = 0)
+  No valid pairs sum to 4
 
-Fix nums[1] = -1, need two numbers that sum to 1
-  [-4, -1, -1,  0,  1,  2]
-        L                  R
-  → Found: -1 + 0 + 1 = 0 ✓
-  → Found: -1 + (-1) + 2 = 0 ✓
+Fix nums[1] = -1, need left+right = 1 (to make -1 + left + right = 0)
+  Found: -1 + 0 + 1 = 0 ✓
+  Found: -1 + (-1) + 2 = 0 ✓
+  (Carefully skip duplicates to avoid duplicate triplets)
 
-Fix nums[2] = -1, skip (duplicate of i=1)
-
-Fix nums[3] = 0, need two numbers that sum to 0
-  [-4, -1, -1,  0,  1,  2]
-              L           R
-  → No valid pairs sum to 0
+Fix nums[2] = -1, skip (duplicate of previous)
 ```
 
 **Algorithm:**
 1. Sort the array
-2. For each index `i`:
-   - Skip if duplicate (same as previous element)
-   - Set `target = -nums[i]`
-   - Use two pointers on `nums[i+1...end]` to find pairs summing to target
-   - When you find a pair, skip duplicates before moving pointers
+2. For each index `i` from 0 to n-3:
+   - Skip if `nums[i]` is duplicate of previous element
+   - Initialize two pointers: `left = i+1`, `right = n-1`
+   - While `left < right`:
+     - Calculate `total = nums[i] + nums[left] + nums[right]`
+     - If `total == 0`: Add triplet, skip all duplicates on both sides, move both pointers
+     - If `total < 0`: Move left pointer right (need bigger numbers)
+     - If `total > 0`: Move right pointer left (need smaller numbers)
 3. Return all unique triplets
 
 ## Complexity
 
-**Time:** O(N²) — Sort is O(N log N), then for each element we do two-pointer pass O(N)  
-**Space:** O(1) or O(N) depending on how you count the output (sorting may use extra space)
+**Time:** O(N²)
+- Sorting: O(N log N)
+- Outer loop: O(N) iterations
+- Inner two-pointer loop: O(N) per iteration
+- Total: O(N log N) + O(N²) = O(N²)
+
+**Space:** O(1) extra space (excluding output array)
 
 ## Edge Cases
 
-- **All zeros** (`[0, 0, 0]`): Result is `[[0, 0, 0]]`, must handle duplicate carefully
+- **All zeros** (`[0, 0, 0]`): Result is `[[0, 0, 0]]`, duplicate handling critical
 - **No valid triplets** (`[0, 1, 1]`): Return empty list
-- **Negative numbers** (`[-1, -2, 3]`): Works fine, two pointers don't care about sign
-- **Duplicate elements** (`[-1, -1, 2, 0, 1]`): Must skip duplicates at `i` and when moving pointers to avoid duplicate triplets
-- **All negative** (`[-3, -2, -1]`): No valid triplet summing to 0
+- **Negative numbers** (`[-1, -2, 3]`): Two pointers work with negatives
+- **Duplicate elements** (`[-1, -1, 2, 0, 1]`): Must skip duplicates at three places
+- **All negative** (`[-3, -2, -1]`): No valid triplet sums to 0
 
 ## Key Insight
 
-**The duplicate handling is the hardest part!** You must skip duplicates in three places:
-1. Skip duplicate `i` values: `if (i > 0 && nums[i] == nums[i-1]) continue`
-2. Skip duplicate `left` values: `while (l < r && nums[l] == nums[l+1]) l++`
-3. Skip duplicate `right` values: `while (l < r && nums[r] == nums[r-1]) r--`
-
-Without this, you'll return duplicate triplets and fail the test.
-
-The sorting also optimizes it: after sorting, if `nums[i] > 0`, no more valid triplets exist (remaining numbers are all positive).
-
-## Pattern Recognition for Similar Problems
-
-🚩 **Red flags for TWO POINTERS + SORTING:**
-1. **"Find N numbers that sum to X"** → **TWO POINTERS** ⭐⭐
-2. **"Return all unique combinations"** + **sorted data** → TWO POINTERS
-3. **Need to avoid duplicates** + **sorted data** → TWO POINTERS
-4. **3Sum, 4Sum, 3Sum Closest** → ALL use this pattern
-
-**How to recognize:**
-- If it says "find a pair/triplet/group" + "sum to X" → Think two pointers
-- If it says "no duplicates in output" → You'll need to sort and skip duplicates
-- If it asks for combinations (not permutations) → Two pointers after sorting
-
-**Similar Problems:** "3Sum Closest", "4Sum", "Two Sum II"
+**Duplicate handling is the hardest part!** You must skip duplicates at exactly the right time and place, and check `left < right` while skipping to avoid boundary issues.
 
 ---
 
 ## My Solution Approach
 
-### **Step 1: Edge Case & Sorting**
+### **Step 1: Sort the Array**
 ```csharp
-if (nums.Length < 3) return result;  // Can't make triplet with < 3 numbers
-Array.Sort(nums);                    // Sort to enable two-pointer technique
+Array.Sort(nums);
 ```
 
-Sorting is **crucial** — it allows me to use the two-pointer optimization and enables duplicate skipping.
+Sorting is **essential**—it enables:
+- Two-pointer technique (move pointers based on comparison)
+- Duplicate skipping (identical values are adjacent)
+- Early termination optimization (if `nums[i] > 0`, no valid triplets exist)
 
-### **Step 2: Fix One Element in a Loop**
+### **Step 2: Fix One Element & Loop**
 ```csharp
 for (int i = 0; i < nums.Length - 2; i++) {
-    // ... process each element as the "fixed" number
+    // Skip duplicate values for the first element to avoid duplicate triplets
+    if (i > 0 && nums[i] == nums[i - 1]) {
+        continue;
+    }
+    // ... find pairs summing to -nums[i]
 }
 ```
 
-For each number `nums[i]`, find two other numbers that sum to `-nums[i]`.
+For each `nums[i]`, we need to find two numbers that sum to `-nums[i]` so the total is 0.
 
-### **Step 3: Smart Optimization**
+**Duplicate skip:** If we've already processed this value, skip it entirely. Otherwise we'd get duplicate triplets.
+
+### **Step 3: Initialize Two Pointers**
 ```csharp
-if (nums[i] > 0) break;  // If current number is positive, stop
+int left = i + 1;
+int right = nums.Length - 1;
 ```
 
-This is a **game-changer**. Since the array is sorted, if `nums[i] > 0`, all remaining numbers are also positive. No way to sum to 0. Stop early.
+- `left` starts right after `i` (can't reuse `nums[i]`)
+- `right` starts at the end
+- They converge toward each other
 
-### **Step 4: Skip Duplicate Fixed Elements**
-```csharp
-if (i > 0 && nums[i] == nums[i - 1]) continue;
-```
-
-If we've already processed this value, skip it. Otherwise we'd get duplicate triplets in our result.
-
-### **Step 5: Set Target & Initialize Two Pointers**
-```csharp
-int target = -nums[i];          // What left + right must equal
-int left = i + 1;              // Start after current element
-int right = nums.Length - 1;   // Start at end
-```
-
-If `nums[left] + nums[right] == target`, then `nums[i] + nums[left] + nums[right] = 0`.
-
-### **Step 6: Two-Pointer Loop with Three Branches**
+### **Step 4: Two-Pointer Loop with Three Cases**
 ```csharp
 while (left < right) {
-    int sum = nums[left] + nums[right];
+    int total = nums[i] + nums[left] + nums[right];
     
-    if (sum == target) {
-        // ✓ Found triplet
+    if (total < 0) {
+        // Sum too small, move left pointer right to increase sum
+        left++;
+    } else if (total > 0) {
+        // Sum too large, move right pointer left to decrease sum
+        right--;
+    } else {
+        // Found a valid triplet
         result.Add(new List<int> { nums[i], nums[left], nums[right] });
         
-        // ⚠️ CRITICAL: Order of duplicate skipping matters!
-        // Skip duplicates on LEFT first (while l < r is still true)
-        while (left < right && nums[left] == nums[left + 1]) left++;
-        
-        // Then skip duplicates on RIGHT (while l < r is still true)
-        while (left < right && nums[right] == nums[right - 1]) right--;
-        
-        // THEN move both pointers after duplicates are skipped
+        // Skip all duplicate values to avoid duplicate triplets
+        while (left < right && nums[left] == nums[left + 1]) {
+            left++;
+        }
+        while (left < right && nums[right] == nums[right - 1]) {
+            right--;
+        }
+        // Move both pointers to continue searching
         left++;
         right--;
-    } 
-    else if (sum < target) {
-        left++;   // Need larger sum, move left pointer right
-    } 
-    else {
-        right--; // Need smaller sum, move right pointer left
     }
 }
 ```
 
-**This is the core logic:**
-- **Match**: Add triplet, skip duplicates on BOTH sides, THEN move both pointers
-- **Too small**: Move left right (get bigger numbers)
-- **Too large**: Move right left (get smaller numbers)
+**Three cases:**
 
-### **⚠️ IMPORTANT: Duplicate Skipping Order**
+1. **`total < 0`** — Sum is too small, we need larger numbers. Since array is sorted, move left pointer RIGHT to increase the sum.
 
-The **order and placement** of duplicate skipping is **critical**:
+2. **`total > 0`** — Sum is too large, we need smaller numbers. Move right pointer LEFT to decrease the sum.
+
+3. **`total == 0`** — Found a valid triplet! 
+   - Add it to results
+   - Skip all duplicate values on the LEFT side (while maintaining `left < right`)
+   - Skip all duplicate values on the RIGHT side (while maintaining `left < right`)
+   - Move both pointers to continue searching for more triplets
+
+### **⚠️ CRITICAL: Duplicate Skipping Order**
+
+The order is **essential**:
 
 ```csharp
-if (sum == needed)
-{
-    result.Add(new List<int> { nums[i], nums[l], nums[r] });
-    
-    // 1️⃣ Skip forward duplicates on LEFT side
-    while (l < r && nums[l] == nums[l + 1]) l++;
-    
-    // 2️⃣ Skip backward duplicates on RIGHT side
-    while (l < r && nums[r] == nums[r - 1]) r--;
-    
-    // 3️⃣ THEN move both pointers
-    l++;
-    r--;
+// 1️⃣ First, skip all duplicate left values
+while (left < right && nums[left] == nums[left + 1]) {
+    left++;
 }
+// 2️⃣ Then, skip all duplicate right values  
+while (left < right && nums[right] == nums[right - 1]) {
+    right--;
+}
+// 3️⃣ THEN move both pointers
+left++;
+right--;
 ```
 
-**Why the order matters:**
-- You must skip duplicates **BEFORE** moving the pointers, not after
-- You must check `l < r` **while skipping**, not just once at the start
-- Skip LEFT first, then RIGHT — both must complete before moving `l++` and `r--`
-- If you move pointers first and skip after, you might miss valid triplets or create boundary issues
-
-This ensures you explore all unique combinations without skipping valid pairs.
-
-### **Why This Works**
-
-1. **Sorted array** → Two pointers work (can eliminate half the search space per comparison)
-2. **Fix one, solve for two** → Reduces O(N³) brute force to O(N²)
-3. **Duplicate skipping** → Ensures no duplicate triplets in output
-4. **Early termination** → If `nums[i] > 0`, break (can't sum to 0)
+**Why this order matters:**
+- Must skip duplicates **BEFORE** incrementing/decrementing the pointers
+- Must check `left < right` **during** skipping to avoid boundary issues
+- Skip LEFT first, then RIGHT — this ensures both complete before moving
+- If you move first and skip after, you might miss valid triplets or crash
 
 ### **Example Walkthrough**
 
@@ -210,30 +178,51 @@ This ensures you explore all unique combinations without skipping valid pairs.
 Input: [-1, 0, 1, 2, -1, -4]
 After sort: [-4, -1, -1, 0, 1, 2]
 
-i=0: nums[0]=-4, target=4
-  left=1(-1), right=5(2) → -1+2=1 (too small) → left++
-  left=2(-1), right=5(2) → -1+2=1 (too small) → left++
-  left=3(0), right=5(2) → 0+2=2 (too small) → left++
-  left=4(1), right=5(2) → 1+2=3 (too small) → left++
-  left=5, right=5 → loop exits, no triplets
+i=0: nums[0]=-4, need total=0, so left+right must equal 4
+  left=1(-1), right=5(2): total=-4+(-1)+2=-3 (too small) → left++
+  left=2(-1), right=5(2): total=-4+(-1)+2=-3 (too small) → left++
+  left=3(0), right=5(2): total=-4+0+2=-2 (too small) → left++
+  left=4(1), right=5(2): total=-4+1+2=-1 (too small) → left++
+  left=5, right=5: exit loop, no triplets found
 
-i=1: nums[1]=-1, target=1
-  left=2(-1), right=5(2) → -1+2=1 ✓ Found! Add [-1,-1,2]
-  Skip duplicates on right (none)
-  left++, right--
-  left=3(0), right=4(1) → 0+1=1 ✓ Found! Add [-1,0,1]
-  left++, right--
-  left=4, right=3 → loop exits
+i=1: nums[1]=-1, need total=0, so left+right must equal 1
+  left=2(-1), right=5(2): total=-1+(-1)+2=0 ✓ Found!
+    Add [-1, -1, 2]
+    Skip left duplicates: nums[2]==-1 == nums[3]? No, so stop
+    Skip right duplicates: nums[5]==2 == nums[4]? No, so stop
+    left++, right-- → left=3, right=4
+  
+  left=3(0), right=4(1): total=-1+0+1=0 ✓ Found!
+    Add [-1, 0, 1]
+    Skip left duplicates: nums[3]==0 == nums[4]? No, so stop
+    Skip right duplicates: nums[4]==1 == nums[3]? No, so stop
+    left++, right-- → left=4, right=3
+  
+  left=4, right=3: exit loop (left >= right)
 
-i=2: nums[2]=-1, skip (duplicate of i=1)
+i=2: nums[2]=-1, skip (equals nums[1], duplicate of previous i)
 
-i=3: nums[3]=0, target=0
-  left=4(1), right=5(2) → 1+2=3 (too large) → right--
-  left=4, right=4 → loop exits
+i=3: nums[3]=0, need total=0, so left+right must equal 0
+  left=4(1), right=5(2): total=0+1+2=3 (too large) → right--
+  left=4, right=4: exit loop (left >= right)
 
-Result: [[-1,-1,2], [-1,0,1]] ✓
+Result: [[-1, -1, 2], [-1, 0, 1]] ✓
 ```
 
-### **Complexity**
-- **Time**: O(N²) — Sort is O(N log N), outer loop is O(N), inner two-pointer loop is O(N)
-- **Space**: O(1) or O(N) depending on if you count the output
+### **Why This Works**
+
+1. **Sorted array** → Two pointers efficiently eliminate half the search space per comparison
+2. **Fix one, solve for two** → Reduces O(N³) brute force to O(N²)
+3. **Careful duplicate skipping** → Ensures no duplicate triplets in output
+4. **Two-pointer movement is optimal** → Never needs to backtrack
+
+### **Time Complexity Breakdown**
+
+```
+Sorting:              O(N log N)
+Outer loop:           O(N) iterations
+  Inner while loop:   O(N) total across all iterations (pointers only move, never reset)
+Total:                O(N log N) + O(N²) = O(N²)
+```
+
+The inner loop is O(N) **total**, not O(N) per iteration, because left and right pointers move monotonically—they never reset or backtrack.
